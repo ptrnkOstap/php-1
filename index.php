@@ -1,87 +1,117 @@
 <?php
-//$a = 2;
-//$b = 4;
-//
-//if ($a >= 0 && $b >= 0) {
-//    echo "разность " . ($a - $b);
-//} elseif ($a < 0 && $b < 0) {
-//    echo "произведение " . ($a * $b);
-//} else {
-//    echo "сумма " . ($a + $b);
-//}
 
-//$a = random_int(0, 15);
-//
-//switch ($a){
-//    case 1:
-//        echo 1 ." ";
-//    case 2:
-//        echo 2 ." ";
-//    case 3:
-//        echo 3 ." ";
-//    case 4:
-//        echo 4 ." ";
-//    case 5:
-//        echo 5 ." ";
-//    case 6:
-//        echo 6 ." ";
-//    case 7:
-//        echo 7 ." ";
-//    case 8:
-//        echo 8 ." ";
-//    case 9:
-//        echo 9 ." ";
-//    case 10:
-//        echo 10 ." ";
-//    case 11:
-//        echo 11 ." ";
-//    case 12:
-//        echo 12 ." ";
-//    case 13:
-//        echo 13 ." ";
-//    case 14:
-//        echo 14 ." ";
-//    case 15:
-//        echo 15;
-//}
-function divide($a, $b)
-{
-    if ($b != 0)
-        return $a / $b;
+$j = 0;
+while (++$j <= 100) {
+    if ($j % 3 == 0) echo $j . ' ';
 }
 
-function subtract($a, $b)
-{
-    return $a - $b;
-}
 
-function multiply($a, $b)
-{
-    return $a * $b;
-}
+do {
+    if ($c == 0) {
+        echo $c . '<br>0 - ноль <br>';
+        $c++;
+    }
+    echo $c . ($c % 2 == 0 ? '- четное число' : ' - нечетное число') . '<br>';
 
-function sum($a, $b)
-{
-    return $a + $b;
-}
+} while (++$c <= 10);
+echo '<br>';
 
-function mathOperation($arg1, $arg2, $operation)
-{
-    switch ($operation) {
-        case "-":
-            return subtract($arg1, $arg2);
-        case "+":
-            return sum($arg1, $arg2);
-        case "*":
-            return multiply($arg1, $arg2);
-        case "/":
-            return divide($arg1, $arg2);
-        default:
-            echo "enter correct operation";
-            break;
+$localitiesAndCities = [
+    'Московская область' => [
+        'Москва',
+        'Зеленоград',
+        'Клин'
+    ],
+    'Ленинградская область ' => [
+        'Санкт-Петербург',
+        'Всеволожск',
+        'Павловск',
+        'Кронштадт',
+    ],
+    'Рязанская область' => [
+        'Сапожок',
+        'Скопин',
+        'Шилово',
+        'Рыбное',
+    ],
+];
+
+for ($i = 0; $i < count(array_keys($localitiesAndCities)); $i++) {
+    echo array_keys($localitiesAndCities)[$i] . ': <br>';
+    for ($j = 0; $j < count($localitiesAndCities[array_keys($localitiesAndCities)[$i]]); $j++) {
+        $newLine = ($j == count($localitiesAndCities[array_keys($localitiesAndCities)[$i]]) - 1 ? '<br><br>' : '');
+        echo $localitiesAndCities[array_keys($localitiesAndCities)[$i]][$j] . ', ' . $newLine;
     }
 }
 
-echo mathOperation(9, 3, "*");
-$date=date("Y");
-echo "<footer style='position: absolute; bottom:50px;left: 50%;font-weight: bold;font-size: 13pt;'>$date</footer>";
+
+function ruTranslit($string): string
+{
+    $letters = [
+        'а' => 'a',
+        'б' => 'b',
+        'в' => 'v',
+        'г' => 'g',
+        'д' => 'd',
+        'е' => 'e',
+        'ё' => 'yo',
+        'ж' => 'zh',
+        'з' => 'z',
+        'и' => 'i',
+        'й' => 'y',
+        'к' => 'k',
+        'л' => 'l',
+        'м' => 'm',
+        'н' => 'n',
+        'О' => 'o',
+        'п' => 'p',
+        'р' => 'r',
+        'с' => 's',
+        'т' => 't',
+        'у' => 'u',
+        'ф' => 'f',
+        'х' => 'kh',
+        'ц' => 'ts',
+        'ш' => 'sh',
+        'щ' => 'sch',
+        'ъ' => '\'',
+        'ы' => 'y',
+        'ь' => '\'',
+        'э' => 'e',
+        'ю' => 'yu',
+        'я' => 'ya',
+    ];
+    return strtr($string, $letters);
+}
+
+echo ruTranslit('4 задание <br>');
+
+function replaceSpaces($string): string
+{
+    return str_replace(' ', '_', $string);
+}
+
+echo replaceSpaces('это 5 задание');
+
+echo '<br>';
+
+$listTitles = [
+    'Title 1',
+    'Title 2',
+    'Title 3',
+    'Title 4',
+    'Title 5',
+];
+
+function createList ($listTitles)
+{
+    echo '<ul>';
+    for ($t = 0; $t < count($listTitles); $t++) {
+
+        echo '<li>' . $listTitles[$t] . '</li>';
+
+    }
+    echo '</ul>';
+}
+
+createList($listTitles);
