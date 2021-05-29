@@ -103,7 +103,8 @@ $listTitles = [
     'Title 5',
 ];
 
-function createList ($listTitles)
+//task 6
+function createList($listTitles)
 {
     echo '<ul>';
     for ($t = 0; $t < count($listTitles); $t++) {
@@ -115,3 +116,7 @@ function createList ($listTitles)
 }
 
 createList($listTitles);
+
+//task 7
+for ($i = 0; $i < 10; print $i++);
+
