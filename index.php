@@ -12,12 +12,13 @@
     <div class="gallery">
         <?php
         include 'pastImages.php';
-        createImg('public/img');
+        createImg();
         ?>
     </div>
+
     <form enctype="multipart/form-data" method="post">
         <input type="file" name="pic">
-        <input type="submit">
+        <input type="submit" name="pic">
     </form>
 </div>
 
