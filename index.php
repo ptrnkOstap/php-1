@@ -8,7 +8,10 @@
 <body>
 
 <div class="gallery_wrapper">
-    <h1> Hello</h1>
+    <div class="header">
+        <h1> Hello</h1>
+        <a class="adm_link" href="admin.php">admin area</a>
+    </div>
     <div class="gallery">
         <?php
         include 'pastImages.php';
@@ -16,10 +19,7 @@
         ?>
     </div>
 
-    <form enctype="multipart/form-data" method="post">
-        <input type="file" name="pic">
-        <input type="submit" name="pic">
-    </form>
+
 </div>
 
 
