@@ -15,7 +15,7 @@
     <a href="createProduct.php" class="p_create_link">create new product</a>
     <div class="products">
         <?php
-        include 'pastImages.php';
+        include 'functions.php';
         renderProductsA();
         ?>
     </div>

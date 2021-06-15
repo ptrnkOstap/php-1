@@ -15,7 +15,7 @@
     </div>
     <div class="show_single_product">
         <?php
-        include 'pastImages.php';
+        include 'functions.php';
         getImgByID();
         ?>
     </div>

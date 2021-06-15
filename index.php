@@ -14,8 +14,8 @@
     </div>
     <div class="gallery">
         <?php
-        include 'pastImages.php';
-        createImg();
+        include 'functions.php';
+        createGallery();
         ?>
     </div>
 

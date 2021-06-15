@@ -1,6 +1,6 @@
 <?php
 
-function createImg()
+function createGallery()
 {
     $db = mysqli_connect('127.0.0.1', 'root', 'root', 'php_course');
     if (!$db) echo 'error with connection' . mysqli_error($db);
@@ -10,7 +10,8 @@ function createImg()
     foreach ($select as $value) {
         $result .= '<div class="product_card">
             <a href ="' . 'product.php' . '?id=' . $value['id'] . '" >' . '<img  src="' . $value['pPath'] . '"'
-            . 'class= "picture" width="250" height="200">' . '</a> <div class="product_tags">   <p class="name"></p> <p class="price"></p></div>
+            . 'class= "picture">' . '</a> <div class="product_tags">   <p class="name">' . $value['pName'] .
+            '</p> <p class="price">' . $value['price'] . '&#36;' . '</p></div>
     </div>';
     }
     echo $result;
@@ -26,12 +27,12 @@ function getImgByID()
         $select = mysqli_query($db, "select pPath, id,pDes FROM products where id= {$_GET['id']}");
         foreach ($select as $result) {
 
-            echo '<img  src="' . ($result['pPath']) . '"' . 'class= "picture" width="100%" height="100%"  >';
+            echo '<img  src="' . ($result['pPath']) . '"' . 'class= "picture"  >';
         }
     }
 }
 
-function showForm($path, $price, $name, $description)
+function showForm($path = '', $price = '', $name = '', $description = '')
 {
     echo '<form class="loadImgForm" enctype="multipart/form-data" method="post">
         <input type="file" name="p_file" value="' . $path . '">
@@ -68,7 +69,6 @@ function getProductByID()
 
 
 }
-
 
 
 function updateProduct()
@@ -128,16 +128,7 @@ function addProduct()
             echo 'no image';
         }
     }
-    echo '<form class="loadImgForm" enctype="multipart/form-data" method="post">
-        <input type="file" name="p_file">
-        <label for="price">Price</label>
-        <input type="number" name="price">
-        <label for="p_name">Product name</label>
-        <input type="text" name="p_name">
-        <label for="p_description">Description</label>
-        <input type="text" name="p_description">
-        <input type="submit" name="pic">
-    </form>';
+    showForm();
 }
 
 function deleteProduct()
@@ -147,7 +138,7 @@ function deleteProduct()
         if (!$db) echo 'error with connection' . mysqli_error($db);
 
         $delete = mysqli_query($db, "delete from products where id= {$_GET['id']}");
-        if(!$delete) mysqli_error($db);
+        if (!$delete) mysqli_error($db);
         echo 'product deleted';
     }
 }

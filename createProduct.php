@@ -16,7 +16,7 @@
     </div>
     <div class="pop_add">
         <?php
-        include 'pastImages.php';
+        include 'functions.php';
         addProduct();
         ?>
     </div>

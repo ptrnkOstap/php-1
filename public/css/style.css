@@ -59,13 +59,33 @@ h1 {
   justify-items: center;
 }
 
+.product_card {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+.product_card img {
+  max-width: 250px;
+  max-height: 200px;
+  width: auto;
+  height: auto;
+}
+
+.product_tags {
+  display: grid;
+  grid-template-columns: 1.8fr 0.7fr;
+  align-items: end;
+}
+
 .p_img {
   display: flex;
   justify-content: center;
 }
 
-.show_single_product {
-  height: 80vh;
+.show_single_product img {
+  max-height: 80vh;
+  height: auto;
 }
 
 .loadImgForm {
