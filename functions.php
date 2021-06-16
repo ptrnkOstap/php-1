@@ -8,6 +8,7 @@ function createGallery()
     $select = mysqli_query($db, 'select pPath, id, price,pName FROM products');
     $result = '';
     foreach ($select as $value) {
+
         $result .= '<div class="product_card">
             <a href ="' . 'product.php' . '?id=' . $value['id'] . '" >' . '<img  src="' . $value['pPath'] . '"'
             . 'class= "picture">' . '</a> <div class="product_tags">   <p class="name">' . $value['pName'] .
@@ -24,7 +25,9 @@ function getImgByID()
         $db = mysqli_connect('127.0.0.1', 'root', 'root', 'php_course');
         if (!$db) echo 'error with connection' . mysqli_error($db);
 
-        $select = mysqli_query($db, "select pPath, id,pDes FROM products where id= {$_GET['id']}");
+        $id = saveSQLInsert($db, $_GET['id']);
+
+        $select = mysqli_query($db, "select pPath, id,pDes FROM products where id= {$id}");
         foreach ($select as $result) {
 
             echo '<img  src="' . ($result['pPath']) . '"' . 'class= "picture"  >';
@@ -54,7 +57,9 @@ function getProductByID()
         $db = mysqli_connect('127.0.0.1', 'root', 'root', 'php_course');
         if (!$db) echo 'error with connection' . mysqli_error($db);
 
-        $select = mysqli_query($db, "select pName, pDes, price, pPath FROM products where id= {$_GET['id']}");
+        $id = saveSQLInsert($db, $_GET['id']);
+
+        $select = mysqli_query($db, "select pName, pDes, price, pPath FROM products where id= {$id}");
         foreach ($select as $result) {
 
             $path = $result['pPath'];
@@ -63,8 +68,10 @@ function getProductByID()
             $description = $result['pDes'];
 
             echo '<img  src="' . ($result['pPath']) . '"' . 'class= "picture" width="100%" height="100%"  >';
-            showForm($path, $price, $name, $description);
             $_POST = null;
+//            var_dump($_POST);
+            showForm($path, $price, $name, $description);
+
         }
     }
 }
@@ -76,14 +83,19 @@ function updateProduct()
         $db = mysqli_connect('127.0.0.1', 'root', 'root', 'php_course');
         if (!$db) echo 'error with connection' . mysqli_error($db);
 
-        $update = mysqli_query($db, "update products set 
-                    pName= {$_POST['p_name']},
-                    price={$_POST['price']},
-                    pDes={$_POST['p_description']},
-                    where id={$_GET['id']}");
-        if (!$update) mysqli_error($db);
-        echo 'product updated';
+        $id = saveSQLInsert($db, $_GET['id']);
+        $nameSQL = saveSQLInsert($db, $_POST['p_name']);
+        $priceSQL = (float)$_POST['price'];
+        $descriptionSQL = saveSQLInsert($db, $_POST['p_description']);
 
+
+        $update = mysqli_query($db, "update products set 
+                    pName= '{$nameSQL}',
+                    price='{$priceSQL}',
+                    pDes='{$descriptionSQL}'
+                    where id='{$id}'");
+        if (!$update) mysqli_error($db);
+        echo ' product updated';
     }
 }
 
