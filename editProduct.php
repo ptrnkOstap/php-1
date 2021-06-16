@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +15,6 @@
     <div class="pop_add">
         <?php
         include 'functions.php';
-        updateProduct();
         getProductByID();
 
         ?>

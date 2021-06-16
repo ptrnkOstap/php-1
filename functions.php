@@ -48,6 +48,8 @@ function showForm($path = '', $price = '', $name = '', $description = '')
 
 function getProductByID()
 {
+    updateProduct();
+
     if (isset($_GET['id'])) {
         $db = mysqli_connect('127.0.0.1', 'root', 'root', 'php_course');
         if (!$db) echo 'error with connection' . mysqli_error($db);
@@ -62,12 +64,9 @@ function getProductByID()
 
             echo '<img  src="' . ($result['pPath']) . '"' . 'class= "picture" width="100%" height="100%"  >';
             showForm($path, $price, $name, $description);
-
+            $_POST = null;
         }
-
     }
-
-
 }
 
 
@@ -108,14 +107,24 @@ function renderProductsA()
     echo $result;
 }
 
+function saveSQLInsert($db, $param): string
+{
+    return mysqli_real_escape_string($db, htmlspecialchars(strip_tags($param)));
+}
+
 function addProduct()
 {
     if (isset($_FILES['p_file']) && $_FILES['p_file']['error'] == 0) {
         if (preg_match("/\.jpg$/", $_FILES['p_file']['name'])) {
             $fileName = 'public/img/' . $_FILES['p_file']['name'];
             $db = mysqli_connect('127.0.0.1', 'root', 'root', 'php_course');
+
+            $nameSQL = saveSQLInsert($db, $_POST['p_name']);
+            $priceSQL = (float)$_POST['price'];
+            $descriptionSQL = saveSQLInsert($db, $_POST['p_description']);
+
             $insert = mysqli_query($db, "insert into products (pPath,pName,price,pDes) 
-                values ('{$fileName}','{$_POST['p_name']}','{$_POST['price']}','{$_POST['p_description']}')");
+                values ('$fileName','$nameSQL', '$priceSQL','$descriptionSQL')");
             if ($insert) {
                 if (move_uploaded_file($_FILES['p_file']['tmp_name'], 'public/img/' . $_FILES['p_file']['name'])) {
                 }
@@ -137,7 +146,9 @@ function deleteProduct()
         $db = mysqli_connect('127.0.0.1', 'root', 'root', 'php_course');
         if (!$db) echo 'error with connection' . mysqli_error($db);
 
-        $delete = mysqli_query($db, "delete from products where id= {$_GET['id']}");
+        $id = saveSQLInsert($db, $_GET['id']);
+
+        $delete = mysqli_query($db, "delete from products where id= {$id}");
         if (!$delete) mysqli_error($db);
         echo 'product deleted';
     }
