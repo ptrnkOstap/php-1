@@ -88,14 +88,25 @@ function updateProduct()
         $priceSQL = (float)$_POST['price'];
         $descriptionSQL = saveSQLInsert($db, $_POST['p_description']);
 
+        $filePathSQL = saveSQLInsert($db, ('public/img/' . $_FILES['p_file']['name']));
+        $getPath = mysqli_query($db, "select pPath from products where id={$id}");
+        foreach ($getPath as $path) {
+            $oldPath = $path['pPath'];
+        }
 
-        $update = mysqli_query($db, "update products set 
+        $update = mysqli_query($db, "update products set
+                    pPath='{$filePathSQL}',
                     pName= '{$nameSQL}',
                     price='{$priceSQL}',
                     pDes='{$descriptionSQL}'
                     where id='{$id}'");
         if (!$update) mysqli_error($db);
-        echo ' product updated';
+        elseif ($filePathSQL != $oldPath) {
+            move_uploaded_file($_FILES['p_file']['tmp_name'], 'public/img/' . $_FILES['p_file']['name']);
+            unlink($oldPath);
+            echo ' product updated';
+        }
+
     }
 }
 
@@ -139,9 +150,10 @@ function addProduct()
                 values ('$fileName','$nameSQL', '$priceSQL','$descriptionSQL')");
             if ($insert) {
                 if (move_uploaded_file($_FILES['p_file']['tmp_name'], 'public/img/' . $_FILES['p_file']['name'])) {
+                    echo 'File uploaded';
                 }
                 $_POST = array();
-                echo 'File uploaded';
+
             } else {
                 echo "something went wrong " . mysqli_error($db);
             };
