@@ -47,11 +47,11 @@ h1 {
 
 .product {
   display: grid;
-  grid-template-columns: 1fr 1fr 0.7fr 0.5fr 0.5fr;
+  grid-template-columns: 1fr 0.6fr 1.4fr 0.5fr;
   grid-template-rows: 1fr;
   align-items: center;
   justify-content: space-evenly;
-  width: 500px;
+  width: 700px;
   border: 1px solid white;
   padding: 2px;
 }
@@ -76,6 +76,10 @@ h1 {
   display: grid;
   grid-template-columns: 1.8fr 0.7fr 0.7fr;
   align-items: end;
+}
+
+.p_price {
+  display: flex;
 }
 
 .p_img {

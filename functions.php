@@ -12,8 +12,8 @@ function createGallery()
         $result .= '<div class="product_card">
             <a href ="' . 'product.php' . '?id=' . $value['id'] . '" >' . '<img  src="' . $value['pPath'] . '"'
             . 'class= "picture">' . '</a> <div class="product_tags">   <p class="name">' . $value['pName'] .
-            '</p> <p class="price">' . $value['price'] . '&#36;' . '</p><button type="submit" name="product" value=  '
-            . $value['id'] . '> buy</button></div>
+            '</p> <p class="price">' . $value['price'] . '&#36;' . '</p><form method="post"><button type="submit" name="add_to_cart" value=  '
+            . $value['id'] . '> buy</button></form></div>
     </div>';
     }
     echo $result;
@@ -77,7 +77,6 @@ function getProductByID()
     }
 }
 
-
 function updateProduct()
 {
     if (isset($_POST['submit'])) {
@@ -113,7 +112,6 @@ function updateProduct()
 
 function renderProductsA()
 {
-    var_dump($_SESSION['login']);
     $db = mysqli_connect('127.0.0.1', 'root', 'root', 'php_course');
     if (!$db) echo 'error with connection' . mysqli_error($db);
 
@@ -131,24 +129,6 @@ function renderProductsA()
     }
     echo $result;
 
-}
-
-function renderCart()
-{
-
-}
-
-function cartAdd()
-{
-    if ($_POST['product'] != null) {
-        $_SESSION['cart']['product']++;
-        $_POST['product'] = null;
-    }
-}
-
-function showCart()
-{
-    var_dump($_SESSION['cart']);
 }
 
 function saveSQLInsert($db, $param): string
@@ -214,12 +194,7 @@ function authForm()
 
 function startSession()
 {
-
     session_start();
-    if (!empty($_SESSION['cart'])) {
-
-    }
-    $_SESSION['cart'] = [];
 }
 
 function authUser()
@@ -256,4 +231,91 @@ function checkAuth()
     }
 }
 
+function cartAddItem()
+{
+    if (isset($_POST["add_to_cart"])) {
+        if (isset($_SESSION["shopping_cart"])) {
+            $item_array_id = array_column($_SESSION["shopping_cart"], "item_id");
+            if (!in_array($_POST["id"], $item_array_id)) {
+                $count = count($_SESSION["shopping_cart"]);
+                $item_array = array(
+                    'item_id' => $_POST["add_to_cart"],
+                    'item_quantity' => $_POST["quantity"] ?? 1
+                );
+                $_SESSION["shopping_cart"][$count] = $item_array;
+                showCart();
+            } else {
+                echo '<script>alert("Item Already Added")</script>';
+                showCart();
+            }
+        } else {
+            $item_array = array(
+                'item_id' => $_POST["add_to_cart"],
+                'item_quantity' => $_POST["quantity"] ?? 1
+            );
+            $_SESSION["shopping_cart"][0] = $item_array;
+            showCart();
+        }
+    }
+}
+
+function showCart()
+{
+    var_dump($_SESSION['shopping_cart']);
+}
+
+function renderShoppingCart()
+{
+    $db = mysqli_connect('127.0.0.1', 'root', 'root', 'php_course');
+    if (!$db) echo 'error with connection' . mysqli_error($db);
+    $items_array_id = array_column($_SESSION["shopping_cart"], "item_id");
+
+    $ids = join(',', $items_array_id);
+
+    $select = mysqli_query($db, "select pPath, id, price,pName FROM products where id in ($ids)");
+    if (!$select) {
+        die (mysqli_error($db));
+    }
+    $items_list = '';
+    $totalValue = 0;
+    $totalQuantity = 0;
+
+    if (mysqli_num_rows($select) > 0) {
+        foreach ($select as $row) {
+
+            $quantity = searchMultidimArr($row['id'], $_SESSION['shopping_cart'])['item_quantity'];
+            $totalQuantity += (int)$quantity;
+            $totalValue += ((int)$quantity * (float)$row['price']);
+
+            $items_list .= '<div class="product">
+            <div class="p_img"><img  src="' . $row['pPath'] . '".'
+                . 'class= "picture" width="150" height="100"></div> <div class="p_name">' . $row["pName"] .
+                '</div> <div class="p_price">' . $row["price"] .
+                '&#36; x  <div class="div">&nbsp;' . $quantity . ' <b>- Total</b>  ' . $quantity * $row['price'] . '&#36;</div></div>  <a href="' . 'viewCart.php?action=delete&id=' . $row["id"] .
+                '" class="p_delete">delete</a></div>';
+        }
+    }
+    echo '<p> In the cart <b>' . $totalQuantity . '</b> items for <b>' . $totalValue . '</b>&#36;</p>';
+    if (isset($_GET["action"])) {
+        if ($_GET["action"] == "delete") {
+            foreach ($_SESSION["shopping_cart"] as $keys => $values) {
+                if ($values["item_id"] == $_GET["id"]) {
+                    unset($_SESSION["shopping_cart"][$keys]);
+                    echo '<script> window.location="viewCart.php"</script>';
+                }
+            }
+        }
+    }
+    echo $items_list;
+}
+
+function searchMultidimArr($id, $array)
+{
+    foreach ($array as $key) {
+        if ($key['item_id'] == $id) {
+            return $key;
+        }
+    }
+    return null;
+}
 

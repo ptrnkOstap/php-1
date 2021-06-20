@@ -23,9 +23,8 @@ authUser();
     <div class="gallery">
         <?php
         createGallery();
-        cartAdd();
+        cartAddItem();
         ?>
-        <div class="cart_view"><?php showCart(); ?></div>
     </div>
 
 
