@@ -242,10 +242,8 @@ function cartAddItem()
                     'item_quantity' => $_POST["quantity"] ?? 1
                 );
                 $_SESSION["shopping_cart"][$count] = $item_array;
-                showCart();
             } else {
                 echo '<script>alert("Item Already Added")</script>';
-                showCart();
             }
         } else {
             $item_array = array(
@@ -253,7 +251,6 @@ function cartAddItem()
                 'item_quantity' => $_POST["quantity"] ?? 1
             );
             $_SESSION["shopping_cart"][0] = $item_array;
-            showCart();
         }
     }
 }
