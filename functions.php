@@ -19,7 +19,6 @@ function createGallery()
     echo $result;
 }
 
-
 function getImgByID()
 {
     if (isset($_GET['id'])) {
@@ -259,11 +258,6 @@ function cartAddItem()
     }
 }
 
-function showCart()
-{
-    var_dump($_SESSION['shopping_cart']);
-}
-
 function renderShoppingCart()
 {
     $db = mysqli_connect('127.0.0.1', 'root', 'root', 'php_course');
@@ -283,15 +277,15 @@ function renderShoppingCart()
     if (mysqli_num_rows($select) > 0) {
         foreach ($select as $row) {
 
-            $quantity = searchMultidimArr($row['id'], $_SESSION['shopping_cart'])['item_quantity'];
-            $totalQuantity += (int)$quantity;
-            $totalValue += ((int)$quantity * (float)$row['price']);
+            $orderQuantity = searchMultidimArr($row['id'], $_SESSION['shopping_cart'])['item_quantity'];
+            $totalQuantity += (int)$orderQuantity;
+            $totalValue += ((int)$orderQuantity * (float)$row['price']);
 
             $items_list .= '<div class="product">
             <div class="p_img"><img  src="' . $row['pPath'] . '".'
                 . 'class= "picture" width="150" height="100"></div> <div class="p_name">' . $row["pName"] .
                 '</div> <div class="p_price">' . $row["price"] .
-                '&#36; x  <div class="div">&nbsp;' . $quantity . ' <b>- Total</b>  ' . $quantity * $row['price'] . '&#36;</div></div>  <a href="' . 'viewCart.php?action=delete&id=' . $row["id"] .
+                '&#36; x  <div class="div">&nbsp;' . $orderQuantity . ' <b>- Total</b>  ' . $orderQuantity * $row['price'] . '&#36;</div></div>  <a href="' . 'viewCart.php?action=delete&id=' . $row["id"] .
                 '" class="p_delete">delete</a></div>';
         }
     }
