@@ -1,7 +1,7 @@
 <?php
-    include 'functions.php';
-    authUser();
-    checkAuth();
+include 'functions.php';
+authUser();
+checkAuth();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,6 +22,11 @@
     <div class="products">
         <?php
         renderProductsA();
+        ?>
+    </div>
+    <div class="orders_list">
+        <?php
+        showOrdersA();
         ?>
     </div>
 

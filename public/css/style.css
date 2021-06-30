@@ -60,7 +60,7 @@ h1 {
   grid-template-rows: 1fr;
   align-items: center;
   justify-content: space-evenly;
-  width: 700px;
+  width: 500px;
   border: 1px solid white;
   padding: 2px;
 }
@@ -137,6 +137,24 @@ h1 {
   box-sizing: border-box;
   margin: 5px;
   width: 100%;
+}
+
+.orders_list {
+  position: absolute;
+  background-color: palegoldenrod;
+  width: 400px;
+  right: 10px;
+  top: 50%;
+}
+
+.order_tag_line, .order_tag_line_header {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 1fr;
+  grid-template-rows: 1fr;
+}
+
+.order_tag_line_header {
+  font-weight: bold;
 }
 
 /*# sourceMappingURL=style.css.map */
