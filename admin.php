@@ -1,7 +1,7 @@
 <?php
-        include 'functions.php';
-        authUser();
-        checkAuth();
+    include 'functions.php';
+    authUser();
+    checkAuth();
 ?>
 <!DOCTYPE html>
 <html lang="en">

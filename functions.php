@@ -211,8 +211,11 @@ function authUser()
         $select = mysqli_query($db, "SELECT password_hash FROM users WHERE login = '$login'");
         if ($user = mysqli_fetch_assoc($select)) {
             // password_hash("password", PASSWORD_BCRYPT)
-            if (password_verify($password, $user['password_hash'])) {
+            if (password_verify($password, $user['password_hash']) && $login == 'test1') {
                 header('Location: admin.php');
+                $_SESSION['login'] = $login;
+            } else if (password_verify($password, $user['password_hash'])) {
+                header('Location: index.php');
                 $_SESSION['login'] = $login;
             } else {
                 echo "Пароль неверный ";
@@ -282,7 +285,8 @@ function renderShoppingCart()
             <div class="p_img"><img  src="' . $row['pPath'] . '".'
                 . 'class= "picture" width="150" height="100"></div> <div class="p_name">' . $row["pName"] .
                 '</div> <div class="p_price">' . $row["price"] .
-                '&#36; x  <div class="div">&nbsp;' . $orderQuantity . ' <b>- Total</b>  ' . $orderQuantity * $row['price'] . '&#36;</div></div>  <a href="' . 'viewCart.php?action=delete&id=' . $row["id"] .
+                '&#36; x  <div class="div">&nbsp;' . $orderQuantity . ' <b>- Total</b>  ' . $orderQuantity * $row['price'] .
+                '&#36;</div></div>  <a href="' . 'viewCart.php?action=delete&id=' . $row["id"] .
                 '" class="p_delete">delete</a></div>';
         }
     }
@@ -309,4 +313,90 @@ function searchMultidimArr($id, $array)
     }
     return null;
 }
+
+function sendForm()
+{
+    if (isset($_SESSION["shopping_cart"])) {
+        echo '<h2 class="send_form_header">Fill the form to place your order</h2>
+        <form method="post" class="">
+        <label for="c_name">Your name</label>
+        <input type="text" name="c_name">
+        <label for="c_address">Address</label>
+        <input type="text" name="c_address">
+        <label for="c_phone">Phone number</label>
+        <input type="text" name="c_phone">
+        <input type="submit" name="send_form" value="Order">
+    </form>';
+    }
+
+//    echo var_dump($_SESSION["shopping_cart"]);
+}
+
+function orderCreate()
+{
+    if (isset($_POST["send_form"])) {
+        if (!empty($_POST['c_name']) && !empty($_POST['c_address']) && !empty($_POST['c_phone'])) {
+
+            $db = mysqli_connect('127.0.0.1', 'root', 'root', 'php_course');
+
+            $uName = saveSQLInsert($db, $_POST['c_name']);
+            $uPhone = (float)$_POST['c_phone'];
+            $uAddress = saveSQLInsert($db, $_POST['c_address']);
+            $uID = getUserID();
+
+            $insert = mysqli_query($db, "insert into orders (user_id,user_name,user_phone,address) 
+                values ('$uID','$uName', '$uPhone','$uAddress')");
+            if ($insert) {
+                $orderID = mysqli_insert_id($db);
+
+                foreach ($_SESSION['shopping_cart'] as $cartItem) {
+                    $itemID = $cartItem['item_id'];
+                    $itemPrice = getPrice($itemID);
+                    $itemInsert = mysqli_query($db, "insert into order_items(product_id,prod_quantity,prod_price,order_id)
+                    values ('$itemID',
+                            '{$cartItem['item_quantity']}',
+                            '$itemPrice',
+                            '$orderID')");
+                    if (!$itemInsert) mysqli_error($db);
+                }
+                $_SESSION['shopping_cart'] = array();
+                echo 'Order created';
+                echo '</br>' . 'Order number - ' . $orderID;
+                $_POST = array();
+
+            } else {
+                echo "something went wrong " . mysqli_error($db);
+            };
+        } else {
+            echo 'fill all the field in the send form';
+        }
+    }
+}
+
+function getPrice($id)
+{
+    if (!empty($id)) {
+        $db = mysqli_connect('127.0.0.1', 'root', 'root', 'php_course');
+        $query = mysqli_query($db, "select price from products where id='$id'");
+        foreach ($query as $row) {
+            return $row['price'];
+        }
+    }
+}
+
+function getUserID()
+{
+    if (!empty($_SESSION['login'])) {
+
+        $db = mysqli_connect('127.0.0.1', 'root', 'root', 'php_course');
+        $passLogin = saveSQLInsert($db, $_SESSION['login']);
+        $select = mysqli_query($db, "select id from users where login='$passLogin'");
+        foreach ($select as $row) {
+            return $row['id'];
+        }
+    }
+}
+
+
+
 

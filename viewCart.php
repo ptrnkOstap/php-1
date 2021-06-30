@@ -17,13 +17,17 @@ authUser();
         <h1> Your cart</h1>
         <div class="login_form"><?php authForm() ?></div>
     </div>
-    <div class="products">
+    <div class="cart_products">
         <?php
         renderShoppingCart();
-
         ?>
     </div>
-
+    <div class="send_form">
+        <?php
+            orderCreate();
+            sendForm();
+        ?>
+    </div>
 
 </div>
 

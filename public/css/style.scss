@@ -43,8 +43,17 @@ h1 {
   align-items: center;
   overflow: auto;
   border-bottom: 1px solid black;
-
 }
+
+.cart_products {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  height: 400px;
+  overflow: auto;
+  border-bottom: 1px solid black;
+}
+
 
 .product {
   display: grid;
@@ -120,4 +129,19 @@ h1 {
   position: absolute;
   right:30px;
   top:50%;
+}
+.send_form_header{
+
+}
+.send_form{
+  padding-top:30px;
+  display: flex;
+  flex-flow:column nowrap;
+  width: 400px;
+  height: 300px;
+  & *{
+    box-sizing: border-box;
+    margin: 5px;
+    width: 100%;
+  }
 }
