@@ -18,18 +18,21 @@ checkAuth();
         <h1> administrator panel</h1>
         <a href="?logout">Logout</a>
     </div>
-    <a href="createProduct.php" class="p_create_link">create new product</a>
-    <div class="products">
-        <?php
-        renderProductsA();
-        ?>
+    <div class="content">
+        <div class="products_list">
+            <a href="createProduct.php" class="p_create_link">create new product</a>
+            <div class="products">
+                <?php
+                renderProductsA();
+                ?>
+            </div>
+        </div>
+        <div class="orders_list">
+            <?php
+            showOrdersA();
+            ?>
+        </div>
     </div>
-    <div class="orders_list">
-        <?php
-        showOrdersA();
-        ?>
-    </div>
-
 
 </div>
 

@@ -210,10 +210,10 @@ function authUser()
         $password = $_POST['password'] ?? "";
         $select = mysqli_query($db, "SELECT password_hash FROM users WHERE login = '$login'");
         if ($user = mysqli_fetch_assoc($select)) {
+            $_SESSION['login'] = $login;
             // password_hash("password", PASSWORD_BCRYPT)
             if (password_verify($password, $user['password_hash']) && $login == 'test1') {
                 header('Location: admin.php');
-                $_SESSION['login'] = $login;
             } else if (password_verify($password, $user['password_hash'])) {
                 header('Location: index.php');
                 $_SESSION['login'] = $login;
@@ -227,7 +227,7 @@ function authUser()
 
 function checkAuth()
 {
-    if (!$_SESSION['login'] == 'test1') {
+    if (!($_SESSION['login'] == 'test1')) {
         echo '404 not found';
         exit();
     }
@@ -400,18 +400,21 @@ function getUserID()
 function showOrdersA()
 {
     $db = mysqli_connect('127.0.0.1', 'root', 'root', 'php_course');
-    $select = mysqli_query($db, "select id as 'Number',user_name as 'Customer', created_at as 'Date' from orders ");
+    $select = mysqli_query($db, "select o.id as 'Number',user_name as 'Customer', created_at as 'Date', os.name as 'Status' 
+                                from orders o inner join order_statuses os on o.status =os.id ");
     $result = '';
     $resultHeader = '<div class="order_tag_line_header">
                     <div class="order_tag"> Order number </div>
                     <div class="order_tag"> Customer name </div>
                     <div class="order_tag"> Order date </div>
+                    <div class="order_tag"> Order status </div>
             </div>';
     while ($order = mysqli_fetch_assoc($select)) {
         $result .= '<div class="order_tag_line">
                     <div class="order_tag"> ' . $order['Number'] . ' </div>
                     <div class="order_tag"> ' . $order['Customer'] . ' </div>
                     <div class="order_tag"> ' . $order['Date'] . ' </div>
+                    <div class="order_tag">' . $order['Status'] . '</div>
                     </div>';
     }
     echo $resultHeader . $result;
